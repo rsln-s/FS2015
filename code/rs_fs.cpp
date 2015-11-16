@@ -15,8 +15,29 @@ rs_fs::rs_fs(const char* file_name){
 	fs.get(c1);
 	fs.get(c2);
 	bytes_per_sector = 256*((int)c2) + (int)c1;
+	fs.get(c1);
+	sectors_per_cluster = (int)c1;
+	fs.get(c1);
+	fs.get(c2);
+	reserved_sectors = 256*((int)c2) + (int)c1;
+	fs.seekg(RS_ROOT_ENTRIES_OFFSET, ios::beg);
+	fs.get(c1);
+	fs.get(c2);
+	root_entries = 256*((int)c2) + (int)c1;
+	fs.seekg(RS_SECTOR_PER_FAT_OFFSET, ios::beg);
+	fs.get(c1);
+	fs.get(c2);
+	sector_per_fat = 256*((int)c2) + (int)c1;
 }
 
 void rs_fs::print(){
-	cout<< "id:  " << identifier << "\nBytes per sector: " << bytes_per_sector;
+	cout<< "id:  " << identifier << "\nBytes per sector: " << bytes_per_sector << "\nSectors per cluster: " << sectors_per_cluster << "\nReserved sectors " << reserved_sectors << "\nSector per FAT: " << sector_per_fat << "\nRoot entries: " << root_entries << '\n';
 }
+
+void rs_fs::ls(){
+	fs.seekg(root_catalog_offset(), ios::beg);
+	char filename[8];
+	fs.get(filename, 9);
+	cout << "some stuff: "<< filename;
+}
+
