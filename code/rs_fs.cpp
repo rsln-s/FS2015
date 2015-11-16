@@ -8,10 +8,15 @@ rs_fs::rs_fs(const char* file_name){
 		cout << "Failed to open a file\n";
 		assert(true);
 	}
-	fs.seekg(3, ios::beg);
+	fs.seekg(RS_IDENTIFIER_OFFSET, ios::beg);
 	fs.get(identifier, 9);
+	fs.seekg(RS_BYTES_PER_SECTOR_OFFSET, ios::beg);
+	char c1, c2;
+	fs.get(c1);
+	fs.get(c2);
+	bytes_per_sector = 256*((int)c2) + (int)c1;
 }
 
-char* rs_fs::get_identifier(){
-	return identifier;
+void rs_fs::print(){
+	cout<< "id:  " << identifier << "\nBytes per sector: " << bytes_per_sector;
 }

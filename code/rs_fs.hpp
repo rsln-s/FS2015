@@ -18,5 +18,5 @@ class rs_fs {
 		int bytes_per_sector;
 	public:
 		rs_fs (const char* file_name);
-		char* get_identifier();
+		void print();
 };
