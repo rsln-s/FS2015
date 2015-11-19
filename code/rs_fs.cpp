@@ -20,6 +20,9 @@ rs_fs::rs_fs(const char* file_name){
 	fs.get(c1);
 	fs.get(c2);
 	reserved_sectors = 256*((int)c2) + (int)c1;
+	fs.seekg(RS_NUMBER_OF_FATS_OFFSET, ios::beg);
+	fs.get(c1);
+	number_of_FATs = (int)c1;
 	fs.seekg(RS_ROOT_ENTRIES_OFFSET, ios::beg);
 	fs.get(c1);
 	fs.get(c2);
@@ -36,8 +39,10 @@ void rs_fs::print(){
 
 void rs_fs::ls(){
 	fs.seekg(root_catalog_offset(), ios::beg);
+	int offset = root_catalog_offset();
+	cout << " Offset at the beginning : " << offset <<'\n';
 	char filename[8];
 	fs.get(filename, 9);
-	cout << "some stuff: "<< filename;
+	cout << " Please let this be a name of a file: " << filename << '\n';
 }
 
