@@ -6,7 +6,7 @@ using std::cout;
 using std::cin;
 
 int main(){
-	rs_fs* my_fat = new rs_fs("../fatdisk");
+	rs_fs* my_fat = new rs_fs("../fatdisk_ondar");
 	my_fat->print();
 	my_fat->ls();
 	return 0;

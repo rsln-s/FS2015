@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp rs_fs.cpp -o futil
+	clang++ main.cpp rs_fs.cpp -o futil

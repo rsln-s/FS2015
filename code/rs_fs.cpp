@@ -38,11 +38,63 @@ void rs_fs::print(){
 }
 
 void rs_fs::ls(){
-	fs.seekg(root_catalog_offset(), ios::beg);
-	int offset = root_catalog_offset();
+	fs.seekg(root_directory_entry_offset(), ios::beg);
+	int offset = root_directory_entry_offset();
 	cout << " Offset at the beginning : " << offset <<'\n';
-	char filename[8];
-	fs.get(filename, 9);
-	cout << " Please let this be a name of a file: " << filename << '\n';
+    char filename[8];
+    int a;
+    char extension[3];
+    int b;
+    char attribute[1];
+	fs.read(filename, 8);
+    fs.read(extension, 3);
+    fs.read(attribute, 1);
+    printf("%.8s.%.3s\n", filename, extension);
+    
+    while (1) {
+        cout << "\niteration\n"<< std::flush;
+        offset += 32;
+        fs.seekg(offset, ios::beg);
+        fs.read(filename, 8);
+        fs.read(extension, 3);
+        fs.read(attribute, 1);
+        if (*attribute == 0x0f) {
+            char* longfilename = (char*) calloc(sizeof(char), 26);
+            char buf;
+            int j = 0;
+            fs.seekg(offset+1, ios::beg);
+            for (int i = 0; i < 10; i++) {
+                fs.read(&buf, 1);
+                cout << buf;
+                longfilename[j] = buf;
+                fs.read(&buf, 1);
+                j++;
+            }
+            fs.seekg(offset+0x0E, ios::beg);
+            for (int i = 0; i < 12; i++) {
+                fs.read(&buf, 1);
+                cout << buf;
+                longfilename[j] = buf;
+                fs.read(&buf, 1);
+                j++;
+            }
+            fs.seekg(offset+0x1C, ios::beg);
+            for (int i = 0; i < 6; i++) {
+                fs.read(&buf, 1);
+                cout << buf;
+                longfilename[j] = buf;
+                fs.read(&buf, 1);
+                j++;
+            }
+//            printf("long filename: %.26s\n", longfilename);
+        }else{
+            printf("%.8s.%.3s\n", filename, extension);
+        }
+        if (filename[0] == 0) {
+            cout << "\n Reached end\n";
+            break;
+        }
+    }
+	
 }
 

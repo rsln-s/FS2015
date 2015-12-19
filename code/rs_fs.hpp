@@ -27,6 +27,6 @@ class rs_fs {
 	public:
 		rs_fs (const char* file_name);
 		void print();
-		int root_catalog_offset() { return bytes_per_sector * (reserved_sectors + number_of_FATs * sector_per_fat); }
+		int root_directory_entry_offset() { return bytes_per_sector * (reserved_sectors + number_of_FATs * sector_per_fat); }
 		void ls();
 };
