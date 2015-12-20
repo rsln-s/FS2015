@@ -24,9 +24,12 @@ class rs_fs {
 		int sector_per_fat;
 		int root_entries;
 		int number_of_FATs;
+        int current_offset;
+        void ls_routine(int offset);
+        int root_directory_entry_offset() { return bytes_per_sector * (reserved_sectors + number_of_FATs * sector_per_fat); }
 	public:
 		rs_fs (const char* file_name);
 		void print();
-		int root_directory_entry_offset() { return bytes_per_sector * (reserved_sectors + number_of_FATs * sector_per_fat); }
 		void ls();
+        void cd(char* new_dir_name);
 };
